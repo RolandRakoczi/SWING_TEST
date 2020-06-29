@@ -15,7 +15,6 @@ public class MyShape {
     public MyShape(String name, Shape shape) {
         this.name = name;
         this.shape = shape;
-		
 		if (name.equals("Rectangle")){
 			this.width=(int)shape.getBounds().getWidth();
 			this.height=(int)shape.getBounds().getHeight();

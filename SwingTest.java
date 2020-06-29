@@ -11,61 +11,38 @@ public class SwingTest extends JFrame implements ActionListener {
     private JComboBox<MyShape> jcomboShape;
     private JComboBox<MyColor> jcomboColor;
     private JCheckBox checkbox;
-	private final JScrollPane scrollpane;
     private JButton button;
 	private JSlider slider;
     private MyShape[] shape;
     private MyColor[] colors;
 
-
     public SwingTest() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setSize(500,550);
 		this.setLayout(null);
-		getContentPane();
-		
+		getContentPane();	
 		colors=new MyColor[5];
         colors[0]=new MyColor("red", Color.red);
         colors[1]=new MyColor("white", Color.white);
         colors[2]=new MyColor("magenta", Color.magenta);
         colors[3]=new MyColor("black", Color.black);
-        colors[4]=new MyColor("yellow", Color.yellow);
-		
+        colors[4]=new MyColor("yellow", Color.yellow);		
 		jcomboColor=new JComboBox<MyColor>(colors);	
 		jcomboColor.setMaximumSize(new Dimension(120,50));
 		jcomboColor.setAlignmentX(CENTER_ALIGNMENT);
-
-		/*SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
-				paintingPanel=new MyPaintingPanel(5,5,475,300);
-			}
-		});*/
-		paintingPanel=new MyPaintingPanel(5,5,475,300);
-		//Thread t=new Thread(paintingPanel);
-		
-        //paintingPanel = new MyPaintingPanel(5,5,475,300);
-		//paintingPanel.setBorder(LineBorder.createBlackLineBorder());
-        //paintingPanel.setBackground(Color.gray);
-		scrollpane=new JScrollPane(paintingPanel,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
-		scrollpane.setBounds(5,5,475,300);
-		this.add(scrollpane);
-
 		shape = new MyShape[2];
         Shape shape1 = new Rectangle(200, 100);
 		shape[0]=new MyShape("Rectangle",shape1);
 		Shape shape2 = new Polygon();
-        shape[1] = new MyShape("Triangle",shape2);	
-		
+        shape[1] = new MyShape("Triangle",shape2);			
 		jcomboShape = new JComboBox<MyShape>(shape);
 		jcomboShape.setMaximumSize(new Dimension(120,50));
-		jcomboShape.setAlignmentX(CENTER_ALIGNMENT);
-			
+		jcomboShape.setAlignmentX(CENTER_ALIGNMENT);			
         panel = new JPanel();
 		panel.setBounds(5,305,475,205);
 		panel.setAlignmentX(CENTER_ALIGNMENT);
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		slider=new JSlider(JSlider.HORIZONTAL,-50,300,0);
+		slider=new JSlider(JSlider.HORIZONTAL,-50,200,0);
 		slider.setMajorTickSpacing(50);
 		slider.setMinorTickSpacing(10);
 		slider.setPaintTicks(true);
@@ -88,17 +65,16 @@ public class SwingTest extends JFrame implements ActionListener {
         button.addActionListener(this);
         panel.add(button);
         this.add(panel);
-		
-		int[]x ={(int)(scrollpane.getBounds().getWidth()/2),(int)(scrollpane.getBounds().getWidth()/3),(int)(scrollpane.getBounds().getWidth()*2/3)};
-		int[]y ={(int)(scrollpane.getBounds().getHeight()/3)+35,(int)(scrollpane.getBounds().getHeight()*2/3)+35,(int)(scrollpane.getBounds().getHeight()*2/3)+35};
-
-		shape[1].init(x,y);
-		
+		MyShape myShape=(MyShape)jcomboShape.getSelectedItem();
+		MyColor myColor=(MyColor)jcomboColor.getSelectedItem();		
+		paintingPanel=new MyPaintingPanel(5,5,475,300,checkbox.isSelected(),myShape,myColor);
+		this.add(paintingPanel);
+		int[]x ={(int)(paintingPanel.getBounds().getWidth()/2),(int)(paintingPanel.getBounds().getWidth()/3),(int)(paintingPanel.getBounds().getWidth()*2/3)};
+		int[]y ={(int)(paintingPanel.getBounds().getHeight()/3),(int)(paintingPanel.getBounds().getHeight()*2/3),(int)(paintingPanel.getBounds().getHeight()*2/3)};
+		shape[1].init(x,y);		
         this.setVisible(true);
 		this.setLocationRelativeTo(null);
-        this.setResizable(false);
-		
-		//t.run();
+        this.setResizable(false);		
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -111,9 +87,7 @@ public class SwingTest extends JFrame implements ActionListener {
 	class SliderListener implements ChangeListener{
 		public void stateChanged(ChangeEvent e){
 			for (int i=0;i<shape.length;i++){
-				//System.out.println(s.toString());
 				if (shape[i].toString().equals("Rectangle")){
-					//System.out.println("Slider value="+slider.getValue()+" X="+shape[i].getWidth()+" Y="+shape[i].getHeight());
 					shape[i].setSize(shape[i].getInitWidth()+slider.getValue(),shape[i].getInitHeight()+slider.getValue());	
 					MyShape myShape=(MyShape)jcomboShape.getSelectedItem();
 					MyColor myColor=(MyColor)jcomboColor.getSelectedItem();
@@ -132,6 +106,5 @@ public class SwingTest extends JFrame implements ActionListener {
 
     public static void main(String[] args) {
         SwingTest test = new SwingTest();
-
     }
 }
